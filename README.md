@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lumen Market · Retail Sales Dashboard (demo)
 
-## Getting Started
+A sales and inventory dashboard for a fictional six-store grocery chain. Built as a portfolio piece to show the kind of internal tool I build for clients: KPIs, charts, filters, role-based access and Excel/PDF export on top of PostgreSQL.
 
-First, run the development server:
+**All data is synthetic.** Lumen Market is not a real company.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+**Live demo:** _add the Netlify URL here_
+Demo accounts (password `demo1234`):
+
+| Account | Role | Sees |
+|---|---|---|
+| `admin@lumenmarket.demo` | Admin | All stores, store comparison |
+| `manager@lumenmarket.demo` | Store manager | Downtown store only |
+
+## Features
+
+- **KPIs with period-over-period change:** revenue, gross margin, average ticket, units sold, compared with the previous period of the same length.
+- **Filters** by date range (presets or custom), store and category, kept in the URL so any view can be shared or bookmarked.
+- **Charts:** revenue trend (daily, or weekly for ranges over 90 days) and revenue by category and store with margin.
+- **Top products** and **low-stock alerts** ranked by days of cover (stock on hand ÷ average daily sales over the last 28 days).
+- **Role-based access:** store managers are locked to their own store. The rule is enforced on the server when the filters are resolved, so editing the URL (`?store=2`) does not expose other stores.
+- **Export** of the current view to Excel (one sheet per table, with number formats) and PDF.
+- Responsive layout and dark mode.
+
+## Stack
+
+Next.js 15 (App Router, Server Components, Server Actions) · TypeScript · Tailwind CSS · PostgreSQL (Netlify Database) · Recharts · ExcelJS · jsPDF · JWT sessions with `jose` and `bcryptjs`.
+
+## How it is organized
+
+```
+netlify/database/migrations/   SQL schema and deterministic seed data (applied on deploy)
+src/middleware.ts              Blocks /dashboard for visitors without a valid session
+src/lib/auth.ts                Signed HttpOnly session cookie (JWT, 8 h)
+src/lib/queries.ts             All SQL; resolves filters and enforces the store scope
+src/app/login/                 Login page and server actions (login / logout)
+src/app/dashboard/page.tsx     Server component that loads data and lays out the page
+src/components/                Filter bar, KPI cards, charts, tables, export buttons
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Data model: `stores`, `categories`, `products`, `daily_sales` (one row per store, product and day), `store_daily_tickets`, `inventory`, `users`. All queries are parameterized.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Running locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Requirements: Node 20+ and PostgreSQL.
 
-## Learn More
+```bash
+npm install
+createdb retail
+for f in netlify/database/migrations/*.sql; do psql -d retail -f "$f"; done
 
-To learn more about Next.js, take a look at the following resources:
+cat > .env.local <<EOF
+LOCAL_DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/retail
+AUTH_SECRET=$(openssl rand -hex 32)
+EOF
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploying to Netlify
 
-## Deploy on Vercel
+1. Connect the repository to a Netlify project.
+2. Set the `AUTH_SECRET` environment variable (at least 32 random characters).
+3. Deploy. Netlify provisions the database and applies the migrations automatically.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built by Juan Felipe Gómez — full-stack developer (Next.js, TypeScript, PostgreSQL).

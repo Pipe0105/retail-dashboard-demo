@@ -1,26 +1,74 @@
 @import "tailwindcss";
 
+/* Operations-console theme: navy chrome, slate neutrals, amber reserved for alerts.
+   Components reference roles only; the values live here. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --page: #e9edf2;
+  --panel: #ffffff;
+  --panel-head: #f6f8fa;
+  --rail: #0b1a2e;
+  --rail-2: #13263f;
+  --rail-ink: #c5d0de;
+  --rail-muted: #6f8299;
+  --ink: #0f1720;
+  --ink-2: #425166;
+  --muted: #6b788a;
+  --line: #d3dae3;
+  --line-strong: #b7c2cf;
+  --grid: #e6eaef;
+  --data: #1f4f8c;
+  --data-soft: #dbe5f1;
+  --amber: #b86e00;
+  --amber-bg: #fff3dc;
+  --red: #b42318;
+  --red-bg: #fde7e4;
+  --green: #137333;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-page: var(--page);
+  --color-panel: var(--panel);
+  --color-panel-head: var(--panel-head);
+  --color-rail: var(--rail);
+  --color-rail-2: var(--rail-2);
+  --color-rail-ink: var(--rail-ink);
+  --color-rail-muted: var(--rail-muted);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-data: var(--data);
+  --color-data-soft: var(--data-soft);
+  --color-amber: var(--amber);
+  --color-amber-bg: var(--amber-bg);
+  --color-red: var(--red);
+  --color-red-bg: var(--red-bg);
+  --color-green: var(--green);
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+
+/* Figures that must line up: KPI values, table columns, axis ticks. */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Small uppercase labels used for panel titles and column headers. */
+.label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
