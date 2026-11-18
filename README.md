@@ -4,13 +4,13 @@ A sales and inventory dashboard for a fictional six-store grocery chain. Built a
 
 **All data is synthetic.** Lumen Market is not a real company.
 
-**Live demo:** _add the Netlify URL here_
+**Live demo:** https://lumen-market-demo.netlify.app
 Demo accounts (password `demo1234`):
 
-| Account | Role | Sees |
-|---|---|---|
-| `admin@lumenmarket.demo` | Admin | All stores, store comparison |
-| `manager@lumenmarket.demo` | Store manager | Downtown store only |
+| Account                    | Role          | Sees                         |
+| -------------------------- | ------------- | ---------------------------- |
+| `admin@lumenmarket.demo`   | Admin         | All stores, store comparison |
+| `manager@lumenmarket.demo` | Store manager | Downtown store only          |
 
 ## Features
 
